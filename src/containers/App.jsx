@@ -8,6 +8,7 @@ import axios from "axios";
 const API_END_POINT = "https://api.themoviedb.org/3/";
 const POPULAR_MOVIES_URL =
   "discover/movie?language=fr&sort_by=popularity.desc&include_adult=false&append_to_response=images";
+const SEARCH_URL = "search/movie?language=fr&include_adult=false";
 const API_KEY = "api_key=c1d3ef51f0aeffc42fc943f999ba13b5";
 
 class App extends Component {
@@ -51,16 +52,64 @@ class App extends Component {
         }.bind(this)
       );
   }
+
+  onClickListItem(movie) {
+    this.setState({ currentMovie: movie }, function() {
+      this.applyVideoToCurrentMovie();
+      this.setRecommendation();
+    });
+  }
+
+  setRecommendation() {
+    axios
+      .get(
+        `${API_END_POINT}movie/${
+          this.state.currentMovie.id
+        }/recommendations?${API_KEY}&language=fr`
+      )
+      .then(
+        function(res) {
+          this.setState({
+            moviesList: res.data.results.slice(0, 6)
+          });
+        }.bind(this)
+      );
+  }
+
+  onClickSearch(searchText) {
+    if (searchText) {
+      axios
+        .get(`${API_END_POINT}${SEARCH_URL}&${API_KEY}&query=${searchText}`)
+        .then(
+          function(res) {
+            if (res.data && res.data.results[0]) {
+              if (res.data.results[0].id !== this.state.currentMovie.id) {
+                this.setState({ currentMovie: res.data.results[0] }, () => {
+                  this.applyVideoToCurrentMovie();
+                  this.setRecommendation();
+                });
+              }
+            }
+          }.bind(this)
+        );
+    }
+  }
+
   render() {
     const renderVideoList = () => {
       if (this.state.moviesList.length >= 5) {
-        return <VideoList moviesList={this.state.moviesList} />;
+        return (
+          <VideoList
+            moviesList={this.state.moviesList}
+            callback={this.onClickListItem.bind(this)}
+          />
+        );
       }
     };
     return (
       <div className="container">
         <div className="m-5">
-          <SearchBar />
+          <SearchBar callback={this.onClickSearch.bind(this)} />
         </div>
         <div className="row">
           <div className="col-md-8">

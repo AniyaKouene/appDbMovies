@@ -2,9 +2,11 @@ import React from "react";
 
 const IMG_BASE_URl = "https://image.tmdb.org/t/p/w500/";
 
-const VideoListItem = ({ movie }) => {
+const VideoListItem = (props) => {
+  const {movie} = props;
   return (
-    <li className="list-group-item">
+    <li className="list-group-item" onClick={handleOnClick
+  }>
       <div className="media">
           <img
             className="align-self-center"
@@ -19,7 +21,12 @@ const VideoListItem = ({ movie }) => {
         </div>
       </div>
     </li>
-  );
+  ); 
+   function handleOnClick(){
+    props.callback(movie);
+
+   }
 };
 
 export default VideoListItem;
+ 
