@@ -1,9 +1,9 @@
 import React from 'react';
 
-const VideoListItem = (props) => {
+const VideoListItem = ({movie}) => {
   return (
     <div>
-      <li> Un film reco: {props.movie}</li>
+      <li> Un film reco: {movie}</li>
     </div>
   );
 };
