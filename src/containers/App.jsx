@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SearchBar from "../components/SearchBar";
 import VideoDetails from "../components/VideoDetails";
+import Video from "../components/Video";
 import VideoList from "./VideoList";
 import axios from "axios";
 
@@ -21,12 +22,34 @@ class App extends Component {
   initMovies() {
     axios.get(`${API_END_POINT}${POPULAR_MOVIES_URL}&${API_KEY}`).then(
       function(res) {
-        this.setState({
-          moviesList: res.data.results.slice(1, 6),
-          currentMovie: res.data.results[0]
-        });
+        this.setState(
+          {
+            moviesList: res.data.results.slice(1, 6),
+            currentMovie: res.data.results[0]
+          },
+          function() {
+            this.applyVideoToCurrentMovie();
+          }
+        );
       }.bind(this)
     );
+  }
+
+  applyVideoToCurrentMovie() {
+    axios
+      .get(
+        `${API_END_POINT}movie/${
+          this.state.currentMovie.id
+        }?${API_KEY}&append_to_response=videos&include_aldult=false`
+      )
+      .then(
+        function(res) {
+          const youtubeKey = res.data.videos.results[0].key;
+          let newCurrentMovieState = this.state.currentMovie;
+          newCurrentMovieState.videoId = youtubeKey;
+          this.setState({ currentMovie: newCurrentMovieState });
+        }.bind(this)
+      );
   }
   render() {
     const renderVideoList = () => {
@@ -35,13 +58,20 @@ class App extends Component {
       }
     };
     return (
-      <div>
-        <SearchBar />
-        {renderVideoList()}
-        <VideoDetails
-          title={this.state.currentMovie.title}
-          description={this.state.currentMovie.overview}
-        />
+      <div className="container">
+        <div className="m-5">
+          <SearchBar />
+        </div>
+        <div className="row">
+          <div className="col-md-8">
+            <Video videoId={this.state.currentMovie.videoId} />
+            <VideoDetails
+              title={this.state.currentMovie.title}
+              description={this.state.currentMovie.overview}
+            />
+          </div>
+          <div className="col-md-4">{renderVideoList()}</div>
+        </div>
       </div>
     );
   }

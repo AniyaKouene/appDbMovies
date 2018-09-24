@@ -7,11 +7,14 @@ class SearchBar extends Component {
   }
   render() {
     return (
-      <div>
-        <input
+      <div className="row">
+      <div className="col-sm-8">
+      <input className="form-control"
           onChange={this.handleChange.bind(this)}
           placeholder={this.state.placeholder}
         />
+      </div>
+       
       </div>
     );
   }

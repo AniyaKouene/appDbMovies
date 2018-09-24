@@ -2,7 +2,7 @@ import React from "react";
 
 const VideoDetails = ({ title, description }) => {
   return (
-    <div>
+    <div className="m-4">
       <h1> {title}</h1>
       <p>{description}</p>
     </div>

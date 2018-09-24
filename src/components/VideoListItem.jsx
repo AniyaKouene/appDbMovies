@@ -1,15 +1,24 @@
-import React from 'react';
+import React from "react";
 
 const IMG_BASE_URl = "https://image.tmdb.org/t/p/w500/";
 
-const VideoListItem = ({movie}) => {
+const VideoListItem = ({ movie }) => {
   return (
-    <div>
-      <li>
-        <img height="100px" width="100px" src={`${IMG_BASE_URl}${movie.poster_path}`} alt=""/>
-      <h3>{movie.title}</h3>
-      </li>
-    </div>
+    <li className="list-group-item">
+      <div className="media">
+          <img
+            className="align-self-center"
+            height="100px"
+            width="100px"
+            src={`${IMG_BASE_URl}${movie.poster_path}`}
+            alt=""
+          />
+
+        <div className="media-body">
+          <h5 className="title_list_item text-center">{movie.title}</h5>
+        </div>
+      </div>
+    </li>
   );
 };
 
