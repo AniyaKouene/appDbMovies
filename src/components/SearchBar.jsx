@@ -5,8 +5,7 @@ class SearchBar extends Component {
     super(props);
     this.state = { searchText: "", 
     placeholder: "Tapez votre film ici..." , 
-    intervalBeforerequest: 2000, 
-    lockrequest: false};
+};
   }
   render() {
     return (
@@ -32,12 +31,6 @@ class SearchBar extends Component {
 
   handleChange(e) {
     this.setState({ searchText: e.target.value });
-    if(!this.state.lockrequest){
-      this.setState({lockrequest: true})
-      setTimeout(function(){this.search()}.bind(this), this.state.intervalBeforerequest)
-
-    }
-
   }
 
   handleClick(e) {
@@ -46,7 +39,6 @@ class SearchBar extends Component {
 
   search() {
     this.props.callback(this.state.searchText);
-    this.setState({lockrequest: false})
   }
 }
 

@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import Header from "../components/header";
 import SearchBar from "../components/SearchBar";
 import VideoDetails from "../components/VideoDetails";
 import Video from "../components/Video";
 import VideoList from "./VideoList";
 import axios from "axios";
+
 
 const API_END_POINT = "https://api.themoviedb.org/3/";
 const POPULAR_MOVIES_URL =
@@ -107,6 +109,10 @@ class App extends Component {
       }
     };
     return (
+      <div>
+           <div className="container-fluid">
+    <Header/>
+    </div>
       <div className="container">
         <div className="m-5">
           <SearchBar callback={this.onClickSearch.bind(this)} />
@@ -122,6 +128,8 @@ class App extends Component {
           <div className="col-md-4">{renderVideoList()}</div>
         </div>
       </div>
+      </div>
+ 
     );
   }
 }
